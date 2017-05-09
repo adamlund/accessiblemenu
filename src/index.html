@@ -104,16 +104,16 @@
       <button class="menuButton" aria-controls="unrelatedThingsMenu" aria-expanded="false">Drawing Programs</button>
       <ul id="unrelatedThingsMenu" class="secondLevelNav">
         <li>
-          <a href="#WestlawNext">Microsoft Paint</a>
+          <a href="#MSPaint.exe">Microsoft Paint</a>
         </li>
         <li>
-          <a href="#PracticalLaw">SketchApp</a>
+          <a href="#sketchApp">Sketch</a>
         </li>
         <li>
-          <a href="#PracticePoint">The GIMP</a>
+          <a href="#gimp">The GIMP</a>
         </li>
         <li>
-          <a href="#LegalAnaltyics">Adobe Illustrator</a>
+          <a href="#illustrator">Adobe Illustrator</a>
         </li>
       </ul>
 
@@ -162,7 +162,7 @@
 
   function makeMenus(){
 
-    document.getElementsByClassName("menuButton").forEach(function(mb){
+    [].slice.call( document.getElementsByClassName("menuButton") ).forEach(function(mb){
 
       if(mb.hasAttribute('aria-controls')){
 

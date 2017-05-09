@@ -16,11 +16,9 @@ var DropMenuManager = {
       self.dropmenus.forEach(function(dm){
 
         if(dm.isOpen() && event.target !== dm.trigger){
-
-          if(!event.path.includes(dm.menuElement)){
+          if(! dm.menuElement.contains(event.currentTarget)){
             dm.close();
           }
-
         }
 
       });
@@ -114,7 +112,6 @@ var DropMenu = {
     _self.trigger.setAttribute('aria-expanded', 'true');
 
     _self.menuElement.querySelectorAll( _self.SELECTABLES ).item(0).focus();
-
     _self.menuElement.dispatchEvent(new Event('menuopen'));
 
   },
