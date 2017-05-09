@@ -1,0 +1,198 @@
+<!doctype html>
+<html class="no-js" lang="eng">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Accessible Menu Examples</title>
+  <meta name="description" content="accessibility">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="styles/meyer_reset.css">
+
+  <style>
+
+    /**
+      Basic menu CSS styling
+     */
+
+    .title {
+      display: inline-block;
+      float: left;
+      padding: 10px;
+    }
+    .title h1 {
+      font-size: 32px;
+      color: #efefef;
+    }
+    .navBar {
+      background-color: #0C50A0;
+      color: #efefef;
+      height: 50px;
+    }
+
+    ul.firstLevelNav {
+      float: right;
+    }
+
+    ul.firstLevelNav > li {
+      display: inline-block;
+
+      position: relative;
+      margin-right: 12px;
+      vertical-align: middle;
+
+      border-left: none;
+      border-radius: 3px;
+      height: 25px;
+      padding: 12px 4px 0px 0px;
+      margin-left: 8px;
+      float: left;
+      clear: none;
+
+    }
+
+    .secondLevelNav {
+      background: #efefef;
+      padding: 10px;
+      position: absolute;
+    }
+
+    button[aria-expanded='true'] + ul.secondLevelNav {
+      display: block;
+      visibility: visible;
+    }
+
+    button[aria-expanded='false'] + ul.secondLevelNav {
+      display: none;
+      visibility: hidden;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      background-color: #637B85;
+      height: 40px;
+      width: 100%;
+    }
+
+    footer a,
+    footer a:visited {
+      color: #efefef;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid #efefef;
+    }
+
+    footer div {
+      padding: 10px;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div role="navigation" class="navBar">
+  <div class="title"><h1 id="app_title">Accessible Menu Demo</h1></div>
+  <ul class="firstLevelNav">
+    <li>
+      <button class="menuButton" aria-controls="unrelatedThingsMenu" aria-expanded="false">Drawing Programs</button>
+      <ul id="unrelatedThingsMenu" class="secondLevelNav">
+        <li>
+          <a href="#WestlawNext">Microsoft Paint</a>
+        </li>
+        <li>
+          <a href="#PracticalLaw">SketchApp</a>
+        </li>
+        <li>
+          <a href="#PracticePoint">The GIMP</a>
+        </li>
+        <li>
+          <a href="#LegalAnaltyics">Adobe Illustrator</a>
+        </li>
+      </ul>
+
+    </li>
+
+    <li>
+      <button class="menuButton" aria-controls="favoriteRecipesMenu" aria-expanded="false">Favorite Recipes</button>
+      <ul id="favoriteRecipesMenu" class="secondLevelNav">
+        <li>
+          <a href="#crepes">French style crepes</a>
+        </li>
+        <li>
+          <a href="#steak">Soy sauce marinated steak</a>
+        </li>
+        <li>
+          <a href="#pancakes">Pancakes from scratch</a>
+        </li>
+        <li>
+          <a href="#walleye">Beer-battered walleye</a>
+        </li>
+        <li>
+          <a href="#kebabs">Turkish-style kebabs</a>
+        </li>
+      </ul>
+
+    </li>
+
+  </ul>
+
+</div>
+<div id="main"><form style="padding-top: 50px;">
+  <input type="checkbox" id="tab_mode" aria-labelledby="tab_mode_label"><label for="tab_mode" id="tab_mode_label">Enable tab wrap in menus</label> </form></div>
+<footer><div><a href="#">This is the last link in the page</a></div></footer>
+
+<script src="js/drop_menu.js"></script>
+<script src="js/keyboardable_list.js"></script>
+<script>
+
+  function setApp(newApp){
+    document.getElementById("app_title").innerText = newApp;
+  }
+
+  var dmm = Object.create(DropMenuManager);
+  dmm.init();
+  var keylists = [];
+
+  function makeMenus(){
+
+    document.getElementsByClassName("menuButton").forEach(function(mb){
+
+      if(mb.hasAttribute('aria-controls')){
+
+        var kbl = KeyboardableList.generate(document.getElementById( mb.getAttribute('aria-controls') ) );
+
+        keylists.push(kbl);
+
+        var dm = dmm.makeClickDropMenu(kbl.menuElement, mb);
+
+        kbl.setDropmenu(dm);
+
+      }
+
+    });
+
+  }
+
+  makeMenus();
+
+  document.getElementById("tab_mode").addEventListener('change', function(evt){
+
+    keylists.forEach(function(kl){
+      kl.opts.tab_mode = evt.target.checked ? 0 : 1;
+    });
+
+    console.log(evt);
+  });
+
+
+</script>
+
+</body>
+</html>

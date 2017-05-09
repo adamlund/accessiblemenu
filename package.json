@@ -1,0 +1,28 @@
+{
+  "name": "accessiblemenu",
+  "version": "0.0.1",
+  "description": "A set of accessible menu components written in pure VanillaJS",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamlund/accessiblemenu.git"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "menu",
+    "dropdown"
+  ],
+  "author": "Adam Lund",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamlund/accessiblemenu/issues"
+  },
+  "homepage": "https://github.com/adamlund/accessiblemenu#readme",
+  "devDependencies": {
+    "underscore": "^1.8.3"
+  }
+}
