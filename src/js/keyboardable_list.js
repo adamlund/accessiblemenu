@@ -1,7 +1,10 @@
 /**
- * Created by AdamLund on 3/21/17.
+ * KeyboardableList
+ * Takes an element and adds directional key listeners to the items within it.
+ * Only items that can have focus will have listeners added to them.
+ * The parent element will be treated with ARIA role='menu', selectable items will be treated with role='menuitem'
+ * @type {{init: KeyboardableList.init, focusOn: KeyboardableList.focusOn, setDropmenu: KeyboardableList.setDropmenu, generate: KeyboardableList.generate}}
  */
-
 var KeyboardableList = {
 
   init: function (menuElement) {
@@ -48,30 +51,30 @@ var KeyboardableList = {
     this.menuElement = menuElement;
     this.menuElement.setAttribute('role', 'menu');
 
-    var menulistanchors = [].slice.call( this.menuElement.querySelectorAll( _self.SELECTABLEITEMS) );
+    var menulistitems = [].slice.call( this.menuElement.querySelectorAll( _self.SELECTABLEITEMS) );
 
-    // Commented out for now -- but the proper treatment for menus is to add role='presentation' attribiute to the container
+    // Commented out for now -- but the proper treatment for menus is to add role='presentation' attribute to the menu item container
     // menulistitems.forEach(function(listitem, listitemindex) {
     //   listitem.setAttribute("role", "presentation");
     // });
 
-    menulistanchors.forEach(function(menuanchor, listitemindex){
+    menulistitems.forEach(function(menuitem){
 
-      menuanchor.setAttribute("role", "menuitem");
+      menuitem.setAttribute("role", "menuitem");
 
-      menuanchor.addEventListener('keydown', function(kevt){
+      menuitem.addEventListener('keydown', function(kevt){
 
         switch(kevt.keyCode || kevt.which) {
 
           case _self.KEYMAP['DOWN']:
           case _self.KEYMAP['RIGHT']:     //right or down arrow -- focus next menu item in order
-            _self.focusOn(_self.DIRECTION['NEXT'], menuanchor, menulistanchors);
+            _self.focusOn(_self.DIRECTION['NEXT'], menuitem, menulistitems);
             kevt.preventDefault();
             break;
 
           case _self.KEYMAP['UP']:        //up arrow -- move focus to previous node
           case _self.KEYMAP['LEFT']:      //left arrow -- move focus to previous node
-            _self.focusOn(_self.DIRECTION['PREVIOUS'], menuanchor, menulistanchors);
+            _self.focusOn(_self.DIRECTION['PREVIOUS'], menuitem, menulistitems);
             kevt.preventDefault();
             break;
 
@@ -81,7 +84,7 @@ var KeyboardableList = {
             var elems = [].slice.call(_self.menuElement.querySelectorAll( _self.SELECTABLEITEMS )) || [ _self.menuElement ];
 
             // remove non-visible but selectable elements
-            elems = elems.filter(function(el){ return !!( el.offsetWidth || el.offsetHeight || el.getClientRects().length ); })
+            elems = elems.filter(function(el){ return !!( el.offsetWidth || el.offsetHeight || el.getClientRects().length ); });
 
             // Catch SHIFT+TAB when on the first element
             if(kevt.shiftKey && document.activeElement == elems[0]){ //first element
@@ -89,7 +92,7 @@ var KeyboardableList = {
               switch(_self.opts.tab_mode){
 
                 case 0:
-                  elems[elems.length-1].focus()
+                  elems[elems.length-1].focus();
                   kevt.preventDefault();
                   break;
 
@@ -110,7 +113,7 @@ var KeyboardableList = {
                   break;
 
                 case 1:
-                  _self.dropMenu.toggle()
+                  _self.dropMenu.toggle();
                   break;
 
               }
@@ -155,7 +158,10 @@ var KeyboardableList = {
       }
     }
   },
-
+  /**
+   * Add reference to the parent dropmenu -- to close it upon certain actions
+   * @param dropMenu
+   */
   setDropmenu: function(dropMenu){
     this.dropMenu = dropMenu;
   },

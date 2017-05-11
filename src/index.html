@@ -54,8 +54,21 @@
 
     .secondLevelNav {
       background: #efefef;
+      width: 200px;
       padding: 10px;
       position: absolute;
+    }
+
+    .secondLevelNav li {
+      margin-bottom: 20px;
+    }
+
+    .secondLevelNav li:last-child {
+      margin-bottom: 0;
+    }
+
+    .secondLevelNav li {
+      display: block;
     }
 
     button[aria-expanded='true'] + ul.secondLevelNav {
@@ -144,7 +157,7 @@
   </ul>
 
 </div>
-<div id="main"><form style="padding-top: 50px;">
+<div id="main" role="main"><form style="padding-top: 50px;">
   <input type="checkbox" id="tab_mode" aria-labelledby="tab_mode_label"><label for="tab_mode" id="tab_mode_label">Enable tab wrap in menus</label> </form></div>
 <footer><div><a href="#">This is the last link in the page</a></div></footer>
 
@@ -152,44 +165,45 @@
 <script src="js/keyboardable_list.js"></script>
 <script>
 
-  function setApp(newApp){
-    document.getElementById("app_title").innerText = newApp;
-  }
-
-  var dmm = Object.create(DropMenuManager);
-  dmm.init();
-  var keylists = [];
 
   function makeMenus(){
+
+    var dmm = Object.create(DropMenuManager);
+    dmm.init();
+    var keylists = [];
 
     [].slice.call( document.getElementsByClassName("menuButton") ).forEach(function(mb){
 
       if(mb.hasAttribute('aria-controls')){
 
+        // apply a keyboardable list to the contents
         var kbl = KeyboardableList.generate(document.getElementById( mb.getAttribute('aria-controls') ) );
-
         keylists.push(kbl);
 
+        // make the menu, register with manager
         var dm = dmm.makeClickDropMenu(kbl.menuElement, mb);
+        dm.setHorizontalAlignment('right');
 
+        // IMPORTANT - provide a reference to the dropmenu class for the keyboardable list
         kbl.setDropmenu(dm);
 
       }
 
     });
 
+    /**
+     * toggles the tab mode - wrap and nowrap
+     */
+    document.getElementById("tab_mode").addEventListener('change', function(evt){
+
+      keylists.forEach(function(kl){
+        kl.opts.tab_mode = evt.target.checked ? 0 : 1;
+      });
+
+    });
   }
 
   makeMenus();
-
-  document.getElementById("tab_mode").addEventListener('change', function(evt){
-
-    keylists.forEach(function(kl){
-      kl.opts.tab_mode = evt.target.checked ? 0 : 1;
-    });
-
-    console.log(evt);
-  });
 
 
 </script>
